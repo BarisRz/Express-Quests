@@ -9,8 +9,6 @@ const userControllers = require("./controllers/usersControllers");
 const validateMovie = require("./middlewares/validateMovie");
 const validateUser = require("./middlewares/validateUser");
 
-// Validation
-
 // Routes
 app.get("/api/movies", movieControllers.getMovies);
 app.get("/api/movies/:id", movieControllers.getMovieById);

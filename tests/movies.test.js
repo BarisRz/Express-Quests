@@ -40,7 +40,6 @@ describe("POST /api/movies", () => {
 
     const response = await request(app).post("/api/movies").send(newMovie);
 
-    /* expect(response.headers["content-type"]).toMatch(/json/); */
     expect(response.status).toEqual(201);
     expect(response.body).toHaveProperty("id");
     expect(typeof response.body.id).toBe("number");
@@ -163,6 +162,57 @@ describe("PUT /api/movies/:id", () => {
     };
 
     const response = await request(app).put("/api/movies/0").send(newMovie);
+
+    expect(response.status).toEqual(404);
+  });
+});
+
+describe("DELETE /api/movies/:id", () => {
+  it("should delete movie", async () => {
+    const newMovie = {
+      title: "MovieToDelete",
+      director: "DeletedThisMan",
+      year: "DeleteThisYear",
+      color: "1",
+      duration: 1,
+    };
+
+    const [result] = await database.query(
+      "INSERT INTO movies(title, director, year, color, duration) VALUES (?, ?, ?, ?, ?)",
+      [
+        newMovie.title,
+        newMovie.director,
+        newMovie.year,
+        newMovie.color,
+        newMovie.duration,
+      ]
+    );
+
+    const id = result.insertId;
+
+    const response = await request(app).delete(`/api/movies/${id}`);
+
+    expect(response.status).toEqual(204);
+
+    const [deletedMovie] = await database.query(
+      "SELECT * FROM movies WHERE id = ?",
+      id
+    );
+
+    const hasBeenDeleted = deletedMovie[0];
+    expect(hasBeenDeleted).toBeUndefined();
+  });
+
+  it("should return no movie", async () => {
+    const newMovie = {
+      title: "HasToBeDeleted",
+      director: "James Cameron",
+      year: "2009",
+      color: "1",
+      duration: 162,
+    };
+
+    const response = await request(app).delete("/api/movies/0").send(newMovie);
 
     expect(response.status).toEqual(404);
   });
