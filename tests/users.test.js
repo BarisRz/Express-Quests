@@ -23,7 +23,6 @@ describe("GET /api/users/:id", () => {
 
   it("should return no user", async () => {
     const response = await request(app).get("/api/users/0");
-
     expect(response.status).toEqual(404);
   });
 });
@@ -74,7 +73,7 @@ describe("PUT /api/users/:id", () => {
     const newUser = {
       firstname: "Faker",
       lastname: "The Goat",
-      email: "faker@thegoat.com",
+      email: `${crypto.randomUUID()}@skt.com`,
       city: "Seoul",
       language: "Korean",
     };
@@ -95,7 +94,7 @@ describe("PUT /api/users/:id", () => {
     const updatedUser = {
       firstname: "Ruler",
       lastname: "JDG",
-      email: "Ruler@jdg.com",
+      email: `${crypto.randomUUID()}@jdg.com`,
       city: "Seoul",
       language: "Korean",
     };
@@ -145,7 +144,7 @@ describe("PUT /api/users/:id", () => {
     const newMovie = {
       firstname: "Caps",
       lastname: "G2",
-      email: "caps@gtwo.com",
+      email: `${crypto.randomUUID()}@g2.com`,
       city: "Berlin",
       language: "English",
     };
